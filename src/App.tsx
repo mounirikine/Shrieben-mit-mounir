@@ -54,7 +54,12 @@ export default function App() {
       setFeedback(analysis);
       
       // Award XP based on the average score
-      const avgScore = (analysis.scores.grammar + analysis.scores.vocabulary + analysis.scores.coherence + analysis.scores.taskAchievement) / 4;
+      const avgScore =
+        (analysis.scores.grammar +
+          analysis.scores.vocabulary +
+          analysis.scores.coherence +
+          analysis.scores.taskCompletion) /
+        4;
       awardXp(avgScore);
       window.dispatchEvent(new Event('gamification-update'));
       

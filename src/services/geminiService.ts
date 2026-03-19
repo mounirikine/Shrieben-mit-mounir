@@ -1,8 +1,18 @@
 import { GoogleGenAI, Type } from '@google/genai';
 import { Level, Category, WritingPrompt, WritingFeedback } from '../types';
 
+function getApiKey(): string {
+  const apiKey = (import.meta as any).env.VITE_GEMINI_API_KEY;
+
+  if (!apiKey) {
+    throw new Error('Missing VITE_GEMINI_API_KEY');
+  }
+
+  return apiKey;
+}
+
 export async function generatePrompt(level: Level, category: Category): Promise<WritingPrompt> {
-  const ai = new GoogleGenAI({ apiKey: (import.meta as any).env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY });
+  const ai = new GoogleGenAI({ apiKey: getApiKey() });
   const systemInstruction = `You are an expert German language teacher. Your task is to generate a writing prompt for a student learning German.
 The student's level is ${level} (CEFR) and the writing category is "${category}".
 Ensure the topic is realistic, engaging, and covers diverse domains (e.g., daily life, work, travel, technology, culture, etc.).
@@ -43,7 +53,7 @@ Provide clear instructions, a suggested word count appropriate for the level, an
 }
 
 export async function analyzeText(level: Level, category: Category, prompt: WritingPrompt, userText: string): Promise<WritingFeedback> {
-  const ai = new GoogleGenAI({ apiKey: (import.meta as any).env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY });
+  const ai = new GoogleGenAI({ apiKey: getApiKey() });
   const systemInstruction = `You are an expert German language teacher and examiner.
 Analyze the student's text based on the provided prompt, their target level (${level}), and the category (${category}).
 Provide a highly detailed, pedagogical, and structured correction.
